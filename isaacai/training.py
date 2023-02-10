@@ -85,7 +85,6 @@ class Trainer:
         for self.batch in self.dls.valid: self.one_batch()
         self.run_callbacks('after_valid')
         
-        
         self.run_callbacks('after_epoch')
 
     def fit(self, epochs=3):
@@ -97,7 +96,3 @@ class Trainer:
     def training(self): return self.model.training
 
     def run_callbacks(self,method_name): run_callbacks(self.callbacks,method_name,self)
-    
-    # def plot_loss(self):
-    #     fig, ax = plt.subplots()
-    #     ax.plot(
