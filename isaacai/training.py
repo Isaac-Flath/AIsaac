@@ -29,35 +29,41 @@ def run_callbacks(callbacks, method_name, trainer=None):
 
 # %% ../nbs/40_training.ipynb 6
 class ProgressCB:
-    def __init__(self, **metrics):
+    def __init__(self, precision=4, **metrics):
+        store_attr(names=['precision'])
         self.metrics = metrics
         self.loss_train, self.loss_valid = Mean(), Mean()
         self.stats_epoch = L()
         
+    def log(self,x): print(x)
+    
+    def before_batch(self,trainer):
+        self.batch_size = len(trainer.batch[trainer.dls.y_name])
     def after_batch(self,trainer):
         # Collect loss, metrics and store
-        if trainer.training: self.loss_train.update(to_cpu(trainer.loss))
+        if trainer.training: self.loss_train.update(to_cpu(trainer.loss.detach()),weight=self.batch_size)
         else: 
-            self.loss_valid.update(to_cpu(trainer.loss))
+            self.loss_valid.update(to_cpu(trainer.loss.detach()),weight=self.batch_size)
             for name, metric in self.metrics.items():
-                self.metrics[name].update(to_cpu(trainer.preds),to_cpu(trainer.batch[trainer.dls.y_name]))
+                self.metrics[name].update(to_cpu(trainer.preds.detach()),to_cpu(trainer.batch[trainer.dls.y_name]))
             
-    def before_epoch(self,trainer):
-            self.st = datetime.now()
+    def before_epoch(self,trainer): self.st = datetime.now()
     def after_epoch(self,trainer):
 
         # compute metrics and append to epoch stats and display
-        
-        _stats = {'train_loss':float(self.loss_train.compute()),
-                  'valid_loss':float(self.loss_valid.compute())}
-        _stats.update({name:float(metric.compute()) for name, metric in self.metrics.items()})
+        _stats = {'epoch':trainer.epoch}
+        _stats.update({'train_loss':round(float(self.loss_train.compute()),self.precision),
+                  'valid_loss':round(float(self.loss_valid.compute()),self.precision)})
+        _stats.update({name:round(float(metric.compute()),self.precision) for name, metric in self.metrics.items()})
         _stats.update({'elapsed':str(datetime.now() - self.st)})
+
         self.stats_epoch.append(_stats)
         self.loss_train.reset(); self.loss_valid.reset(); [metric.reset() for _,metric in self.metrics.items()];
-        print(trainer.epoch,_stats)
+
+        self.log(_stats)
 
 
-# %% ../nbs/40_training.ipynb 7
+# %% ../nbs/40_training.ipynb 8
 class DeviceCB:
     def __init__(self, device=def_device): store_attr()
     def before_fit(self, trainer):
@@ -65,16 +71,19 @@ class DeviceCB:
     def before_batch(self, trainer): 
         trainer.batch = to_device(trainer.batch, device=self.device)
 
-# %% ../nbs/40_training.ipynb 8
+# %% ../nbs/40_training.ipynb 9
 class Trainer:
     def __init__(self, dls, loss_func, opt_func, model, callbacks):
-        store_attr()
+        self.callbacks = [o.__class__.__name__ for o in callbacks]
+        for callback in callbacks: setattr(self,callback.__class__.__name__,callback)
+        store_attr(but='callbacks')
 
     def one_batch(self):
         self.run_callbacks('before_batch')
         self.preds = self.model(self.batch[self.dls.x_name])
         self.loss = self.loss_func(self.preds, self.batch[self.dls.y_name])
         if self.training:
+            self.run_callbacks('before_backward')
             self.loss.backward()
             self.opt.step()
             self.opt.zero_grad()
@@ -98,12 +107,12 @@ class Trainer:
     def fit(self, epochs=3, lr=1e-3):
         self.run_callbacks('before_fit')
         self.opt = self.opt_func(self.model.parameters(), lr)
-        print([o.device for o in trainer.model.parameters()])
         for self.epoch in range(epochs): self.one_epoch()
-        print([o.device for o in trainer.model.parameters()])
         self.run_callbacks('after_fit')
 
     @property
     def training(self): return self.model.training
 
-    def run_callbacks(self,method_name): run_callbacks(self.callbacks,method_name,self)
+    def run_callbacks(self,method_name): 
+        cbs = [getattr(self,o) for o in self.callbacks]
+        run_callbacks(cbs,method_name,self)

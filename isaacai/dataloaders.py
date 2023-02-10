@@ -29,9 +29,10 @@ def random_splitter(dataset, valid_pct=0.2):
 def load_fashion_mnist(sample=None,batch_size=64):
     name = "fashion_mnist"
     ds = load_dataset(name)
-    train,test = ds['train'],ds['test']
     if sample is not None: ds['train'] = ds['train'].select(range(sample))
+    train,test = ds['train'],ds['test']
     x,y = ds['train'].features.keys()
+    
     trn, val = random_splitter(train)
     
     @inplace
