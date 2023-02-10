@@ -19,7 +19,6 @@ from datasets import Dataset
 
 import torchvision.transforms.functional as TF,torch.nn.functional as F
 
-
 # %% ../nbs/10_dataloaders.ipynb 4
 def random_splitter(dataset, valid_pct=0.2):
     n = len(dataset)
@@ -27,7 +26,7 @@ def random_splitter(dataset, valid_pct=0.2):
     return dataset.select(mask2idxs(~_val_idxs)), dataset.select(mask2idxs(_val_idxs))
 
 # %% ../nbs/10_dataloaders.ipynb 5
-def load_fashion_mnist(sample=None):
+def load_fashion_mnist(sample=None,batch_size=64):
     name = "fashion_mnist"
     ds = load_dataset(name)
     train,test = ds['train'],ds['test']
@@ -38,7 +37,7 @@ def load_fashion_mnist(sample=None):
     @inplace
     def transformi(b): b[x] = [torch.flatten(TF.to_tensor(o)) for o in b[x]]
     
-    def create_dl(ds, shuffle=True, batch_size=32):
+    def create_dl(ds, shuffle=True, batch_size=batch_size):
         _ds = ds.with_transform(transformi)
         return DataLoader(_ds, batch_size=batch_size, shuffle=shuffle,)
 

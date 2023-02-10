@@ -1,0 +1,9 @@
+website:
+  sidebar:
+    contents:
+      - index.ipynb
+      - 00_utils.ipynb
+      - 10_dataloaders.ipynb
+      - 20_models.ipynb
+      - 40_training.ipynb
+      - Tutorial.ipynb
