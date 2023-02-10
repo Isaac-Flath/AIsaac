@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "isaacai"
+  site-url: "https://Isaac-Flath.github.io/isaacai"
+  description: "Library for dl"
+  repo-branch: main
+  repo-url: "https://github.com/Isaac-Flath/isaacai"
