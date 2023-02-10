@@ -13,10 +13,12 @@ from torch import nn
 from torch import Tensor
 from datasets import load_dataset
 from torch.utils.data import DataLoader
-import torchvision.transforms.functional as TF
 import pandas as pd 
 import numpy as np
 from datasets import Dataset
+
+import torchvision.transforms.functional as TF,torch.nn.functional as F
+
 
 # %% ../nbs/10_dataloaders.ipynb 4
 def random_splitter(dataset, valid_pct=0.2):
@@ -36,7 +38,7 @@ def load_fashion_mnist(sample=None):
     @inplace
     def transformi(b): b[x] = [torch.flatten(TF.to_tensor(o)) for o in b[x]]
     
-    def create_dl(ds, shuffle=True, batch_size=64):
+    def create_dl(ds, shuffle=True, batch_size=32):
         _ds = ds.with_transform(transformi)
         return DataLoader(_ds, batch_size=batch_size, shuffle=shuffle,)
 

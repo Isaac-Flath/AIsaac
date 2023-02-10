@@ -14,7 +14,6 @@ from torch import nn
 from torch import Tensor
 from datasets import load_dataset
 from torch.utils.data import DataLoader
-import torchvision.transforms.functional as TF
 import pandas as pd 
 import numpy as np
 from datasets import Dataset

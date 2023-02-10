@@ -15,7 +15,6 @@ from torch import nn
 from torch import Tensor
 from datasets import load_dataset
 from torch.utils.data import DataLoader
-import torchvision.transforms.functional as TF
 import pandas as pd 
 import numpy as np
 from datasets import Dataset
@@ -98,3 +97,7 @@ class Trainer:
     def training(self): return self.model.training
 
     def run_callbacks(self,method_name): run_callbacks(self.callbacks,method_name,self)
+    
+    # def plot_loss(self):
+    #     fig, ax = plt.subplots()
+    #     ax.plot(
