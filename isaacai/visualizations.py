@@ -3,8 +3,8 @@
 # %% auto 0
 __all__ = []
 
-# %% ../nbs/50_visualization.ipynb 3
-from fastcore.all import *
+# %% ../nbs/50_visualization.ipynb 4
+import fastcore.all as fc
 
 from .utils import *
 from .dataloaders import *

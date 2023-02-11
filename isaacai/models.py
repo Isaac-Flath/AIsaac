@@ -3,32 +3,32 @@
 # %% auto 0
 __all__ = ['SimpleNet']
 
-# %% ../nbs/20_models.ipynb 3
+# %% ../nbs/20_models.ipynb 4
 from .utils import *
 from .dataloaders import *
-from matplotlib import pyplot as plt
 
-from fastcore.all import *
+import matplotlib.pyplot as plt,matplotlib as mpl
+import torchvision.transforms.functional as TF,torch.nn.functional as F
+import fastcore.all as fc
 import torch
-from torch import nn
-from torch import Tensor
-from datasets import load_dataset
+from torch import nn, Tensor
+from datasets import load_dataset, Dataset
 from torch.utils.data import DataLoader
-import pandas as pd 
-import numpy as np
-from datasets import Dataset
+import pandas as pd, numpy as np
 
-# %% ../nbs/20_models.ipynb 5
+# %% ../nbs/20_models.ipynb 7
 class SimpleNet(nn.Module):
-    '''simple net'''
-    def __init__(self,in_features,hidden_features, out_features):
+    ## simplified from Pytorch Tutorial
+    def __init__(self,n_inp,n_hidden,n_out):
         super().__init__()
-        self.fc1 = nn.Linear(in_features,hidden_features)
-        self.relu = nn.ReLU()
-        self.fc2 = nn.Linear(hidden_features,out_features)
+        self.flatten = nn.Flatten()
+        self.linear_relu_stack = nn.Sequential(
+            nn.Linear(n_inp, n_hidden),
+            nn.ReLU(),
+            nn.Linear(n_hidden, n_out)
+        )
 
-    def forward(self,x):
-        x = self.fc1(x)
-        x = self.relu(x)
-        x = self.fc2(x)
-        return x
+    def forward(self, x):
+        x = self.flatten(x)
+        logits = self.linear_relu_stack(x)
+        return logits

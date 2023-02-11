@@ -3,85 +3,80 @@
 # %% auto 0
 __all__ = ['run_callbacks', 'ProgressCB', 'DeviceCB', 'Trainer']
 
-# %% ../nbs/40_training.ipynb 3
+# %% ../nbs/40_training.ipynb 4
 from .utils import *
 from .dataloaders import *
 from .models import *
-from datetime import datetime
 
-from matplotlib import pyplot as plt
-from fastcore.all import *
+from datetime import datetime
+import torchvision.transforms.functional as TF,torch.nn.functional as F
+
+import matplotlib.pyplot as plt,matplotlib as mpl
+import fastcore.all as fc
 import torch
-from torch import nn
-from torch import Tensor
-from datasets import load_dataset
+from torch import nn, Tensor
+from datasets import load_dataset, Dataset
 from torch.utils.data import DataLoader
-import pandas as pd 
-import numpy as np
-from datasets import Dataset
+import pandas as pd , numpy as np
 from torcheval.metrics import MulticlassAccuracy,Mean
 
-# %% ../nbs/40_training.ipynb 5
+# %% ../nbs/40_training.ipynb 7
 def run_callbacks(callbacks, method_name, trainer=None):
     for callback in sorted(callbacks, key=lambda x: getattr(x, 'order',0)):
         callback_method = getattr(callback, method_name,None)
         if callback_method is not None: callback_method(trainer)
 
-# %% ../nbs/40_training.ipynb 6
+# %% ../nbs/40_training.ipynb 8
 class ProgressCB:
     def __init__(self, precision=4, **metrics):
-        store_attr(names=['precision'])
+        fc.store_attr(names=['precision'])
         self.metrics = metrics
         self.loss_train, self.loss_valid = Mean(), Mean()
-        self.stats_epoch = L()
+        self.stats_epoch = fc.L()
         
     def log(self,x): print(x)
     
     def before_batch(self,trainer):
-        self.batch_size = len(trainer.batch[trainer.dls.y_name])
+        self.batch_size = len(trainer.batch[1])
     def after_batch(self,trainer):
         # Collect loss, metrics and store
         if trainer.training: self.loss_train.update(to_cpu(trainer.loss.detach()),weight=self.batch_size)
         else: 
             self.loss_valid.update(to_cpu(trainer.loss.detach()),weight=self.batch_size)
             for name, metric in self.metrics.items():
-                self.metrics[name].update(to_cpu(trainer.preds.detach()),to_cpu(trainer.batch[trainer.dls.y_name]))
+                self.metrics[name].update(to_cpu(trainer.preds.detach()),to_cpu(trainer.batch[1]))
             
     def before_epoch(self,trainer): self.st = datetime.now()
     def after_epoch(self,trainer):
-
         # compute metrics and append to epoch stats and display
         _stats = {'epoch':trainer.epoch}
         _stats.update({'train_loss':round(float(self.loss_train.compute()),self.precision),
                   'valid_loss':round(float(self.loss_valid.compute()),self.precision)})
         _stats.update({name:round(float(metric.compute()),self.precision) for name, metric in self.metrics.items()})
         _stats.update({'elapsed':str(datetime.now() - self.st)})
-
         self.stats_epoch.append(_stats)
         self.loss_train.reset(); self.loss_valid.reset(); [metric.reset() for _,metric in self.metrics.items()];
-
         self.log(_stats)
 
-
-# %% ../nbs/40_training.ipynb 8
+# %% ../nbs/40_training.ipynb 9
 class DeviceCB:
-    def __init__(self, device=def_device): store_attr()
+    def __init__(self, device=def_device): fc.store_attr()
     def before_fit(self, trainer):
         if hasattr(trainer.model, 'to'): trainer.model.to(self.device)
     def before_batch(self, trainer): 
         trainer.batch = to_device(trainer.batch, device=self.device)
 
-# %% ../nbs/40_training.ipynb 9
+# %% ../nbs/40_training.ipynb 10
 class Trainer:
     def __init__(self, dls, loss_func, opt_func, model, callbacks):
         self.callbacks = [o.__class__.__name__ for o in callbacks]
         for callback in callbacks: setattr(self,callback.__class__.__name__,callback)
-        store_attr(but='callbacks')
+        fc.store_attr(but='callbacks')
 
     def one_batch(self):
         self.run_callbacks('before_batch')
-        self.preds = self.model(self.batch[self.dls.x_name])
-        self.loss = self.loss_func(self.preds, self.batch[self.dls.y_name])
+        self.preds = self.model(self.batch[0])
+        self.loss = self.loss_func(self.preds, self.batch[1])
         if self.training:
             self.run_callbacks('before_backward')
             self.loss.backward()
