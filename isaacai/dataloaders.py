@@ -47,7 +47,7 @@ class DataLoaders():
 
 # %% ../nbs/10_dataloaders.ipynb 9
 @inplace
-def sample_dataset_dict(dataset, sample_sizes=(2000,2000)):
+def sample_dataset_dict(dataset, sample_sizes=(500,500)):
     for sample_size,name in zip(sample_sizes,dataset):
         sample_idxs = random.sample(range(len(dataset[name])),sample_size)
         dataset[name] = dataset[name].select(sample_idxs)
