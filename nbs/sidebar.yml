@@ -6,4 +6,4 @@ website:
       - 10_dataloaders.ipynb
       - 20_models.ipynb
       - 40_training.ipynb
-      - Tutorial.ipynb
+      - 50_visualization.ipynb

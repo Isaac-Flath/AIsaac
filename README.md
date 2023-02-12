@@ -6,55 +6,75 @@ isaacai
 This library is a work in progress to become a deep learning library for
 my own use.
 
+The code in this library is heavily inspired by the miniai library
+developed as part of the part 2 course. I am writing the Deep Learning
+portions myself, but other parts of the library are taken directly from
+that library (ie memory cleaning functions, plotting helper functions,
+etc.). This is very much a work in progress at the very early/beginning
+stages. It’s not ready for practical use (yet!).
+
 ## Install
 
+Cone the repo and do an editable install. You will almost certainly need
+to modify the library as you use it given the early stages it is in.
+
 ``` sh
-pip install git+https://github.com/isaac-flath/isaacai
+pip install -e .[dev]
 ```
 
 ## How to use
 
-### Simple Model
+### Minimal Example
 
-``` python
-import isaacai.all as ia
+### Dataloaders
 
-from torcheval.metrics import MulticlassAccuracy
-
-import torch
-from torch import nn
-```
-
-``` python
-dls = ia.DataLoaders(*ia.load_fashion_mnist(sample=500))
-dls.x_name,dls.y_name = 'image','label'
-```
-
-    Found cached dataset fashion_mnist (/home/.cache/huggingface/datasets/fashion_mnist/fashion_mnist/1.0.0/8d6c32399aa01613d96e2cbc9b13638f359ef62bb33612b077b4c247f6ef99c1)
-
-      0%|          | 0/2 [00:00<?, ?it/s]
-
-``` python
-model = ia.SimpleNet(784,64,10)
-loss_func = nn.CrossEntropyLoss()
-opt = torch.optim.Adam(model.parameters(), lr=1e-3)
-```
-
-``` python
-trainer = ia.Trainer(dls,loss_func, opt,model, 
-                     callbacks=[ia.ProgressCB(Accuracy=MulticlassAccuracy())])
-```
-
-``` python
-trainer.fit(3)
-```
-
-    0 {'train_loss': 0.6093167917388733, 'valid_loss': 0.4507189865442032, 'Accuracy': 0.8432860970497131}
-    1 {'train_loss': 0.44141558610329457, 'valid_loss': 0.4223936734364388, 'Accuracy': 0.8517931699752808}
-    2 {'train_loss': 0.40449896752437486, 'valid_loss': 0.38492812152872696, 'Accuracy': 0.8619682788848877}
+- Minimal Example
+- Pytorch Datasets
+- HuggingFace Datasets
 
 ### Data Augmentation
 
+#### Use Existing Augmentations
+
+- Item vs Batch Aug
+- CPU vs GPU Aug
+
+#### Add New Augmentation
+
+- Item vs Batch Aug
+- CPU vs GPU Aug
+
 ### Training Loop
 
+- Callback System
+- Modification Ex.
+
 ### Models
+
+- Pytorch Model
+- Timm Model
+- HuggingFace Model
+
+### Metrics
+
+- Use Existing Metric
+- Create New Metric
+
+### Optimizers
+
+- Use Existing Optimizer
+- Create New Optimizer
+
+### Loss Functions
+
+- Use Existing Loss Function
+- Create Loss Function
+
+### Model Evaluations
+
+- Activation Stats
+  - Color Dim
+  - Dead Chart
+  - Plot Stats
+- Plot Loss
+- Logging with W&B
