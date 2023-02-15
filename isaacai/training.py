@@ -2,7 +2,7 @@
 
 # %% auto 0
 __all__ = ['BasicTrainCB', 'DeviceCB', 'CancelFitException', 'CancelBatchException', 'CancelEpochException', 'MetricsCB',
-           'TrackingCB', 'Trainer', 'MomentumTrainCB', 'InitDelegates', 'MomentumTrainer']
+           'TrackingCB', 'Trainer', 'MomentumTrainCB', 'init_delegates', 'MomentumTrainer', 'LRFinderCB']
 
 # %% ../nbs/40_training.ipynb 4
 from .utils import *
@@ -39,11 +39,10 @@ class BasicTrainCB:
 
 # %% ../nbs/40_training.ipynb 9
 class DeviceCB:
-    def __init__(self, device=def_device): fc.store_attr()
+    def __init__(self, device=def_device): self.device=device
     def before_fit(self, trainer):
         if hasattr(trainer.model, 'to'): trainer.model.to(self.device)
-    def before_batch(self, trainer): 
-        trainer.batch = to_device(trainer.batch, device=self.device)
+    def before_batch(self, trainer): trainer.batch = to_device(trainer.batch, device=self.device)
 
 # %% ../nbs/40_training.ipynb 10
 class CancelFitException(Exception): pass
@@ -117,7 +116,6 @@ class TrackingCB:
 class Trainer:
     def subclassing_method(self,**kwargs): pass
 
-    @fc.delegates(to=subclassing_method)
     def __init__(self, dls, loss_func, opt_func, model, callbacks,**kwargs):
         self.add_callbacks(callbacks)
         fc.store_attr(but='callbacks')
@@ -162,24 +160,50 @@ class Trainer:
         for method_name in fc.L(method_names): run_callbacks(cbs,method_name,self)
 
 # %% ../nbs/40_training.ipynb 16
-class MomentumTrainCB:
-    def __init__(self,mom): fc.store_attr()
-    def predict(self,trainer): trainer.preds = trainer.model(trainer.batch[0])
-    def get_loss(self,trainer): trainer.loss = trainer.loss_func(trainer.preds,trainer.batch[1])
-    def backward(self,trainer): trainer.loss.backward()
-    def step(self,trainer): trainer.opt.step()
+class MomentumTrainCB(BasicTrainCB):
+    def __init__(self,momentum): self.momentum = momentum
     def zero_grad(self,trainer): 
         with torch.no_grad():
-            for p in trainer.model.parameters(): p.grad *= self.mom
+            for p in trainer.model.parameters(): p.grad *= self.momentum
 
 # %% ../nbs/40_training.ipynb 17
-def InitDelegates(learner,method='subclassing_method'):
-    learner.__init__ = fc.delegates(getattr(learner,method))(learner.__init__)
-    return learner   
+def init_delegates(trainer,method='subclassing_method'):
+    trainer.__init__ = fc.delegates(getattr(trainer,method))(copy_func(trainer.__init__))
+    return trainer   
 
 # %% ../nbs/40_training.ipynb 18
-@InitDelegates
-class MomentumTrainer(Trainer): 
+@init_delegates
+class MomentumTrainer(Trainer):
     def subclassing_method(self,precision=0.85): 
         self.add_callbacks([MomentumTrainCB(precision),DeviceCB(),TrackingCB()])
 
+# %% ../nbs/40_training.ipynb 21
+class LRFinderCB:
+    order = 1
+    def __init__(self,lr_mult=1.3): fc.store_attr()
+    
+    def before_fit(self,trainer):
+        pickle.dump(trainer,open('_tmp.pkl','wb'),protocol=pickle.HIGHEST_PROTOCOL)
+        self.scheduler = ExponentialLR(optimizer=trainer.opt,gamma=self.lr_mult)
+        self.lrs, self.losses = fc.L(), fc.L()
+        self.min = math.inf
+        
+    def before_batch(self,trainer):
+        if not trainer.training: raise CancelEpochException()
+        
+    def after_batch(self,trainer):
+        self.lrs.append(trainer.opt.param_groups[0]['lr'])
+        loss = to_cpu(trainer.loss)
+        self.losses.append(loss)        
+        if loss < self.min: self.min = loss
+        if loss > self.min * 3: raise CancelEpochException()
+        self.scheduler.step()
+        
+    def after_fit(self,_):
+        plt.figure(figsize=(12,4))
+        plt.plot(self.lrs,self.losses)
+        plt.xscale('log')
+        plt.title('Learning Rate Finder'); plt.xlabel('Learning Rate'); plt.ylabel('Losses') 
+        plt.show()
+        global trainer
+        trainer = pickle.load(open('_tmp.pkl','rb'))
