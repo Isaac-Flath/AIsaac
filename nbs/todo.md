@@ -10,22 +10,22 @@
     + Plot stats
   + plot from log
  
-Initialization
-  + LSUV
-  + 
-Training
++ Initialization
+  + LSUV 
+
++ Training
   + One Cycle Learning
   + Train top layer for fine tuning
 
-Models
++ Models
   + Timm
   + HuggingFace
 
-Data Aug
++ Data Aug
   + Resize Item, Resize Batch
   + Mixup
   + Albumentations
   + Pytorch aug
 
-Exp Tracking
++ Exp Tracking
   + Sql Lite?  AIM? W&B? Do I need?
