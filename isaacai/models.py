@@ -16,7 +16,7 @@ from datasets import load_dataset, Dataset
 from torch.utils.data import DataLoader
 import pandas as pd, numpy as np
 
-# %% ../nbs/20_models.ipynb 7
+# %% ../nbs/20_models.ipynb 8
 class SimpleNet(nn.Module):
     ## simplified from Pytorch Tutorial
     def __init__(self,n_inp,n_hidden,n_out):

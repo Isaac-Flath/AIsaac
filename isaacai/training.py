@@ -29,7 +29,7 @@ from fastprogress.fastprogress import master_bar, progress_bar
 import inspect
 
 
-# %% ../nbs/40_training.ipynb 8
+# %% ../nbs/40_training.ipynb 9
 class BasicTrainCB:
     def predict(self,trainer): trainer.preds = trainer.model(trainer.batch[0])
     def get_loss(self,trainer): trainer.loss = trainer.loss_func(trainer.preds,trainer.batch[1])
@@ -37,19 +37,19 @@ class BasicTrainCB:
     def step(self,trainer): trainer.opt.step()
     def zero_grad(self,trainer): trainer.opt.zero_grad()
 
-# %% ../nbs/40_training.ipynb 9
+# %% ../nbs/40_training.ipynb 10
 class DeviceCB:
     def __init__(self, device=def_device): self.device=device
     def before_fit(self, trainer):
         if hasattr(trainer.model, 'to'): trainer.model.to(self.device)
     def before_batch(self, trainer): trainer.batch = to_device(trainer.batch, device=self.device)
 
-# %% ../nbs/40_training.ipynb 10
+# %% ../nbs/40_training.ipynb 11
 class CancelFitException(Exception): pass
 class CancelBatchException(Exception): pass
 class CancelEpochException(Exception): pass
 
-# %% ../nbs/40_training.ipynb 11
+# %% ../nbs/40_training.ipynb 12
 class MetricsCB:
     def __init__(self, precision=4, **metrics):
         self._precision=precision
@@ -79,7 +79,7 @@ class MetricsCB:
             self._log(log)
             [metric.reset() for metric in self.metrics.values()]
 
-# %% ../nbs/40_training.ipynb 12
+# %% ../nbs/40_training.ipynb 13
 class TrackingCB:
     def __init__(self):
         self._log_epoch,self._log_batch, self._log_fit = [pd.DataFrame()]*3
@@ -112,7 +112,7 @@ class TrackingCB:
         
         
 
-# %% ../nbs/40_training.ipynb 13
+# %% ../nbs/40_training.ipynb 14
 class Trainer:
     def subclassing_method(self,**kwargs): pass
 
@@ -159,25 +159,25 @@ class Trainer:
         cbs = [getattr(self,o) for o in self.callbacks]
         for method_name in fc.L(method_names): run_callbacks(cbs,method_name,self)
 
-# %% ../nbs/40_training.ipynb 16
+# %% ../nbs/40_training.ipynb 17
 class MomentumTrainCB(BasicTrainCB):
     def __init__(self,momentum): self.momentum = momentum
     def zero_grad(self,trainer): 
         with torch.no_grad():
             for p in trainer.model.parameters(): p.grad *= self.momentum
 
-# %% ../nbs/40_training.ipynb 17
+# %% ../nbs/40_training.ipynb 18
 def init_delegates(trainer,method='subclassing_method'):
     trainer.__init__ = fc.delegates(getattr(trainer,method))(copy_func(trainer.__init__))
     return trainer   
 
-# %% ../nbs/40_training.ipynb 18
+# %% ../nbs/40_training.ipynb 19
 @init_delegates
 class MomentumTrainer(Trainer):
-    def subclassing_method(self,precision=0.85): 
-        self.add_callbacks([MomentumTrainCB(precision),DeviceCB(),TrackingCB()])
+    def subclassing_method(self,momentum=0.85): 
+        self.add_callbacks([MomentumTrainCB(momentum),DeviceCB(),TrackingCB()])
 
-# %% ../nbs/40_training.ipynb 21
+# %% ../nbs/40_training.ipynb 22
 class LRFinderCB:
     order = 1
     def __init__(self,lr_mult=1.3): fc.store_attr()

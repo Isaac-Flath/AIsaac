@@ -16,19 +16,19 @@ import torchvision.transforms.functional as TF,torch.nn.functional as F
 from torch.utils.data import default_collate
 from operator import itemgetter
 
-# %% ../nbs/10_dataloaders.ipynb 6
+# %% ../nbs/10_dataloaders.ipynb 7
 @fc.delegates(DataLoader)
 def get_dataloaders(train_dataset, valid_dataset, batch_size, **kwargs):
     return (DataLoader(train_dataset, batch_size=batch_size, shuffle=True, **kwargs),
             DataLoader(valid_dataset, batch_size=batch_size*2, shuffle=False, **kwargs))
 
-# %% ../nbs/10_dataloaders.ipynb 7
+# %% ../nbs/10_dataloaders.ipynb 8
 def collate_dataset_dict(dataset):
     get = itemgetter(*dataset.features)
     def _f(b): return get(default_collate(b))
     return _f
 
-# %% ../nbs/10_dataloaders.ipynb 8
+# %% ../nbs/10_dataloaders.ipynb 9
 class DataLoaders():
     def __init__(self, train, valid): fc.store_attr()
     
@@ -45,7 +45,7 @@ class DataLoaders():
         for (image,label),ax in zip(batch,axs.flat):
             show_image(image,ax=ax,title=_dataset.features['label'].names[label])
 
-# %% ../nbs/10_dataloaders.ipynb 9
+# %% ../nbs/10_dataloaders.ipynb 10
 @inplace
 def sample_dataset_dict(dataset, sample_sizes=(500,500)):
     for sample_size,name in zip(sample_sizes,dataset):
