@@ -2,7 +2,7 @@
 
 # %% auto 0
 __all__ = ['def_device', 'set_seed', 'inplace', 'mask2idxs', 'PPDict', 'clean_ipython_hist', 'clean_traceback', 'clean_mem',
-           'to_device', 'to_cpu', 'show_image', 'subplots', 'get_grid']
+           'to_device', 'to_cpu', 'show_image', 'subplots', 'get_grid', 'run_callbacks', 'add_callbacks', 'with_cbs']
 
 # %% ../nbs/00_utils.ipynb 4
 import fastcore.all as fc
@@ -150,3 +150,30 @@ def get_grid(
     for i in range(n, nrows*ncols): axs.flat[i].set_axis_off()
     if title is not None: fig.suptitle(title, weight=weight, size=size)
     return fig,axs
+
+# %% ../nbs/00_utils.ipynb 22
+def run_callbacks(callbacks, method_name, trainer=None):
+    for callback in sorted(callbacks, key=lambda x: getattr(x, 'order',0)):
+        callback_method = getattr(callback, method_name,None)
+        if callback_method is not None: callback_method(trainer)
+
+# %% ../nbs/00_utils.ipynb 23
+def add_callbacks(trainer,callbacks):
+    trainer.callbacks = getattr(trainer,'callbacks',fc.L())
+    if callbacks is not None:
+        for callback in callbacks: 
+            trainer.callbacks.append(callback.__class__.__name__)
+            setattr(trainer,callback.__class__.__name__,callback)
+
+# %% ../nbs/00_utils.ipynb 24
+class with_cbs:
+    def __init__(self, nm, exception): fc.store_attr()
+    def __call__(self, f):
+        def _f(o, *args, **kwargs):
+            try:
+                o.run_callbacks(f'before_{self.nm}')
+                f(o, *args, **kwargs)
+                o.run_callbacks(f'after_{self.nm}')
+            except self.exception: pass
+            finally: o.run_callbacks(f'cleanup_{self.nm}')
+        return _f
