@@ -1,3 +1,7 @@
++ init_delegates
+  + annotations
+  + params with no defaults
+
 + Summary
   + Model Architecture Summary
   + Training Loop/Callbacks Summary
