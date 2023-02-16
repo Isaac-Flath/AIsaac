@@ -2,8 +2,8 @@
 
 # %% auto 0
 __all__ = ['def_device', 'set_seed', 'inplace', 'mask2idxs', 'PPDict', 'copy_func', 'clean_ipython_hist', 'clean_traceback',
-           'clean_mem', 'to_device', 'to_cpu', 'show_image', 'subplots', 'get_grid', 'run_callbacks', 'add_callbacks',
-           'with_cbs']
+           'clean_mem', 'to_device', 'to_cpu', 'show_image', 'subplots', 'get_grid', 'run_callbacks', 'add_callback',
+           'add_callbacks', 'remove_callback', 'remove_callbacks', 'with_cbs']
 
 # %% ../nbs/00_utils.ipynb 4
 import fastcore.all as fc
@@ -17,6 +17,7 @@ from itertools import zip_longest
 from datetime import timedelta
 
 import types
+import inspect
 import functools
 
 # %% ../nbs/00_utils.ipynb 6
@@ -171,15 +172,33 @@ def run_callbacks(callbacks, method_name, trainer=None):
         callback_method = getattr(callback, method_name,None)
         if callback_method is not None: callback_method(trainer)
 
-# %% ../nbs/00_utils.ipynb 24
-def add_callbacks(trainer,callbacks):
-    trainer.callbacks = getattr(trainer,'callbacks',fc.L())
-    if callbacks is not None:
-        for callback in callbacks: 
-            trainer.callbacks.append(callback.__class__.__name__)
-            setattr(trainer,callback.__class__.__name__,callback)
-
 # %% ../nbs/00_utils.ipynb 25
+def add_callback(trainer,callback,force=False):
+    trainer.callbacks = getattr(trainer,'callbacks',fc.L())
+    if callback is None: return None
+    cb_name = callback.__class__.__name__
+    
+    if cb_name in trainer.callbacks: 
+        if force: remove_callback(trainer,callback,True)
+        else: assert cb_name not in trainer.callbacks
+    
+    trainer.callbacks.append(cb_name)
+    setattr(trainer,cb_name,callback)
+    
+def add_callbacks(trainer,callbacks,force=False):
+    trainer.callbacks = getattr(trainer,'callbacks',fc.L())
+    for callback in callbacks: add_callback(trainer,callback, force)
+
+# %% ../nbs/00_utils.ipynb 26
+def remove_callback(trainer,callback,delete=False):
+    cb_name = callback.__class__.__name__
+    trainer.callbacks.remove(cb_name)
+    if delete: delattr(trainer,cb_name)
+    
+def remove_callbacks(trainer,callbacks,delete=False):
+    for callback in callbacks: remove_callback(trainer, callback, delete)
+
+# %% ../nbs/00_utils.ipynb 27
 class with_cbs:
     def __init__(self, nm, exception): fc.store_attr()
     def __call__(self, f):
