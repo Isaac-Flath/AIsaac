@@ -46,8 +46,8 @@ class DataLoaders():
             show_image(image,ax=ax,title=_dataset.features['label'].names[label])
 
 # %% ../nbs/10_dataloaders.ipynb 10
-@inplace
 def sample_dataset_dict(dataset, sample_sizes=(500,500)):
     for sample_size,name in zip(sample_sizes,dataset):
         sample_idxs = random.sample(range(len(dataset[name])),sample_size)
         dataset[name] = dataset[name].select(sample_idxs)
+    return dataset
