@@ -31,7 +31,6 @@ from fastprogress.fastprogress import master_bar, progress_bar
 import inspect
 import torchinfo
 
-
 # %% ../nbs/42_recording.ipynb 11
 class MetricsCB:
     '''Callback to track train/valid loss + metrics'''

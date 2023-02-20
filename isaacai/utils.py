@@ -181,6 +181,10 @@ def add_callback(trainer,callback,force=False):
     trainer.callbacks.append(cb_name)
     setattr(trainer,cb_name,callback)
     
+    _cb = getattr(trainer,cb_name)
+    if hasattr(_cb,'callbacks'): trainer.add_callbacks(getattr(_cb,'callbacks'))    
+
+    
 def add_callbacks(trainer,callbacks,force=False):
     trainer.callbacks = getattr(trainer,'callbacks',fc.L())
     for callback in callbacks: add_callback(trainer,callback, force)
@@ -207,13 +211,13 @@ class with_cbs:
             finally: o.run_callbacks(f'cleanup_{self.nm}')
         return _f
 
-# %% ../nbs/00_utils.ipynb 28
+# %% ../nbs/00_utils.ipynb 30
 class Hook:
     def __init__(self,module,func): self.hook = module.register_forward_hook(fc.bind(func,self))
     def __del__(self): self.hook.remove()
     def remove(self): self.hook.remove()
 
-# %% ../nbs/00_utils.ipynb 29
+# %% ../nbs/00_utils.ipynb 31
 class Hooks(list):
     def __init__(self,modules, func): super().__init__([Hook(module,func) for module in modules])
     def __enter__(self): return self

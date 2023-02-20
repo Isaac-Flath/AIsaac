@@ -57,7 +57,7 @@ def summarize_callbacks(trainer):
 class Trainer:
     def subclassing_method(self,**kwargs): pass
 
-    def __init__(self, dls, loss_func, opt_func, model, callbacks,**kwargs):
+    def __init__(self, dls, loss_func, opt_func, model, callbacks, **kwargs):
         self.add_callbacks(callbacks)
         fc.store_attr(but='callbacks')
         self.subclassing_method(**kwargs)
@@ -85,13 +85,12 @@ class Trainer:
     
     def fit(self, n_epochs=3, lr=1e-3, callbacks=None,train=True,valid=True):
         try:
-            callbacks = fc.L(callbacks)
-            self.add_callbacks(callbacks)
+            self.add_callbacks(fc.L(callbacks))
             self.opt = self.opt_func(self.model.parameters(), lr)
             self.epochs = range(n_epochs)
             self._fit(train,valid)
         finally:
-            self.callbacks = [o for o in self.callbacks if o not in callbacks]
+            self.callbacks = [o for o in self.callbacks if o not in fc.L(callbacks)]
                                                         
     @property
     def training(self): return self.model.training
@@ -100,9 +99,7 @@ class Trainer:
 
     def run_callbacks(self,method_names):
         cbs = [getattr(self,o) for o in self.callbacks]
-        for method_name in fc.L(method_names): 
-            assert method_name in cb_steps
-            run_callbacks(cbs,method_name,self)
+        for method_name in fc.L(method_names): run_callbacks(cbs,method_name,self)
             
     def summarize_model(self): return torchinfo.summary(self.model,input_data=fc.first(self.dls.train)[0])
     def summarize_callbacks(self): return summarize_callbacks(self)
