@@ -28,9 +28,7 @@ pip install -e .[dev]
 
 ### Dataloaders
 
-- Minimal Example
 - Pytorch Datasets
-- HuggingFace Datasets
 
 ### Data Augmentation
 
@@ -43,27 +41,18 @@ pip install -e .[dev]
 
 - Item vs Batch Aug
 - CPU vs GPU Aug
-
-### Training Loop
-
-- Callback System
-- Modification Ex.
+- Random Erasing, torchvision, albumentations
 
 ### Models
 
 - Pytorch Model
 - Timm Model
 - HuggingFace Model
+- Resnet
 
 ### Metrics
 
-- Use Existing Metric
 - Create New Metric
-
-### Optimizers
-
-- Use Existing Optimizer
-- Create New Optimizer
 
 ### Loss Functions
 
@@ -72,9 +61,4 @@ pip install -e .[dev]
 
 ### Model Evaluations
 
-- Activation Stats
-  - Color Dim
-  - Dead Chart
-  - Plot Stats
 - Plot Loss
-- Logging with W&B
