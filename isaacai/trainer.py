@@ -84,10 +84,11 @@ class Trainer:
             if valid: torch.no_grad()(self.one_epoch)(False)
     
     def fit(self, n_epochs=3, lr=1e-3, callbacks=None,train=True,valid=True):
+        fc.store_attr('n_epochs,lr')
         try:
             self.add_callbacks(fc.L(callbacks))
-            self.opt = self.opt_func(self.model.parameters(), lr)
-            self.epochs = range(n_epochs)
+            self.opt = self.opt_func(self.model.parameters(), self.lr)
+            self.epochs = range(self.n_epochs)
             self._fit(train,valid)
         finally:
             self.callbacks = [o for o in self.callbacks if o not in fc.L(callbacks)]

@@ -45,7 +45,7 @@ class LRFinderCB:
         
     def after_batch(self,trainer):
         loss = to_cpu(trainer.loss)
-        if loss > self.min * 2: raise CancelEpochException()
+        if loss > self.min * 3: raise CancelEpochException()
         self.lrs.append(trainer.opt.param_groups[0]['lr'])
         self.losses.append(loss)        
         if loss < self.min: self.min = loss
