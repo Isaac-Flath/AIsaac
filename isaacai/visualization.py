@@ -29,8 +29,8 @@ from torcheval.metrics import MulticlassAccuracy
 from IPython.display import clear_output
 import dill as pickle
 
-# %% ../nbs/43_visualization.ipynb 10
-class LRFinderCB:
+# %% ../nbs/43_visualization.ipynb 9
+class LRFinderCB(Callback):
     order = 1
     def __init__(self,lr_mult=1.3): fc.store_attr()
     
@@ -62,8 +62,8 @@ class LRFinderCB:
         _name = retrieve_global_name(trainer)
         globals()[_name[0]] = pickle.load(open('_tmp.pkl','rb'))
 
-# %% ../nbs/43_visualization.ipynb 14
-class HooksCallback:
+# %% ../nbs/43_visualization.ipynb 13
+class HooksCallback(Callback):
     def __init__(self, hookfunc, module_filter=fc.noop, on_train=True, on_valid=False, modules=None):
         fc.store_attr()
     
@@ -79,7 +79,7 @@ class HooksCallback:
     def __iter__(self): return iter(self.hooks)
     def __len__(self): return len(self.hooks)
 
-# %% ../nbs/43_visualization.ipynb 15
+# %% ../nbs/43_visualization.ipynb 14
 def append_stats(hook, module, inp, outp):
     if not hasattr(hook,'stats'): hook.stats = ([],[],[])
     acts = to_cpu(outp)
@@ -91,7 +91,7 @@ def append_stats(hook, module, inp, outp):
 def get_hist(h):
     return torch.stack(h.stats[2]).t().float().log1p()
 
-# %% ../nbs/43_visualization.ipynb 16
+# %% ../nbs/43_visualization.ipynb 15
 def get_min(h):
     h1 = torch.stack(h.stats[2]).t().float()
     return h1[0]/h1.sum(0)

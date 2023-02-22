@@ -17,9 +17,9 @@ from torch.utils.data import DataLoader
 import pandas as pd, numpy as np
 
 # %% ../nbs/20_models.ipynb 8
-def conv(ni, nf, ks=3, stride=2, act=nn.ReLU, norm=None, bias=None):
+def conv(ni, nf, kernel_size=3, stride=2, act=nn.ReLU, norm=None, bias=None):
     if bias is None: bias = not isinstance(norm, (nn.BatchNorm1d,nn.BatchNorm2d,nn.BatchNorm3d))
-    layers = [nn.Conv2d(ni, nf, stride=stride, kernel_size=ks, padding=ks//2, bias=bias)]
+    layers = [nn.Conv2d(ni, nf, stride=stride, kernel_size=kernel_size, padding=kernel_size//2, bias=bias)]
     if norm: layers.append(norm(nf))
     if act: layers.append(act())
     return nn.Sequential(*layers)

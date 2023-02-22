@@ -35,7 +35,7 @@ import torchinfo
 
 
 # %% ../nbs/49_cb_groups.ipynb 9
-class CoreCBs:
+class CoreCBs(Callback):
     def __init__(self,device=def_device,module_filter=fc.noop,**metrics):
         self.callbacks = [DeviceCB(device=device),
                           BasicTrainCB(),

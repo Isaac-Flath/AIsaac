@@ -32,7 +32,7 @@ import inspect
 import torchinfo
 
 # %% ../nbs/42_recording.ipynb 11
-class MetricsCB:
+class MetricsCB(Callback):
     '''Callback to track train/valid loss + metrics'''
     def __init__(self, **metrics):
         self.metrics = metrics
@@ -57,7 +57,7 @@ class MetricsCB:
             for metric in self.losses.values(): metric.reset()
 
 # %% ../nbs/42_recording.ipynb 15
-class ProgressCB:
+class ProgressCB(Callback):
     '''Callback to display progress while training'''
         
     def before_fit(self,trainer):

@@ -30,16 +30,16 @@ import dill as pickle
 from fastprogress.fastprogress import master_bar, progress_bar
 import inspect
 import torchinfo
-
+from accelerate import Accelerator
 
 # %% ../nbs/41_training.ipynb 11
-class NBatchCB:
+class NBatchCB(Callback):
     def __init__(self,n_batches=1): fc.store_attr()
     def before_batch(self,trainer):
         if trainer.batch_num >= self.n_batches: raise CancelEpochException
 
 # %% ../nbs/41_training.ipynb 12
-class BasicTrainCB:
+class BasicTrainCB(Callback):
     '''Callback for basic pytorch training loop'''
     def predict(self,trainer): trainer.preds = trainer.model(trainer.batch[0])
     def get_loss(self,trainer): trainer.loss = trainer.loss_func(trainer.preds,trainer.batch[1])
@@ -48,7 +48,7 @@ class BasicTrainCB:
     def zero_grad(self,trainer): trainer.opt.zero_grad()
 
 # %% ../nbs/41_training.ipynb 13
-class DeviceCB:
+class DeviceCB(Callback):
     '''Callback to train on specific device'''
     def __init__(self, device=def_device): self.device=device
     def before_fit(self, trainer):
@@ -67,7 +67,7 @@ class MomentumTrainCB(BasicTrainCB):
             for p in trainer.model.parameters(): p.grad *= self.momentum
 
 # %% ../nbs/41_training.ipynb 19
-class BaseSchedulerCB:
+class BaseSchedulerCB(Callback):
     def __init__(self, scheduler_func): fc.store_attr()
     def before_fit(self, trainer): 
         '''Initializes scheduled with opt'''
