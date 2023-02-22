@@ -4,12 +4,12 @@
 __all__ = ['MetricsCB', 'ProgressCB']
 
 # %% ../nbs/42_recording.ipynb 4
-from .utils import *
-from .dataloaders import *
-from .models import *
-from .initialization import *
-from .trainer import *
-from .training import *
+from isaacai.utils import *
+from isaacai.dataloaders import *
+from isaacai.models import *
+from isaacai.initialization import *
+from isaacai.trainer import *
+from isaacai.training import *
 
 from datetime import datetime, timedelta
 import torchvision.transforms.functional as TF,torch.nn.functional as F

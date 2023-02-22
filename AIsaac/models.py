@@ -4,8 +4,8 @@
 __all__ = ['conv', 'get_model_conv', 'fully_connected', 'get_model_fc']
 
 # %% ../nbs/20_models.ipynb 4
-from .utils import *
-from .dataloaders import *
+from isaacai.utils import *
+from isaacai.dataloaders import *
 
 import matplotlib.pyplot as plt,matplotlib as mpl
 import torchvision.transforms.functional as TF,torch.nn.functional as F

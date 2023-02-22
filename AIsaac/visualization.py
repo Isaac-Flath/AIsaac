@@ -4,21 +4,21 @@
 __all__ = ['LRFinderCB', 'HooksCallback', 'append_stats', 'get_hist', 'get_min', 'ActivationStatsCB']
 
 # %% ../nbs/43_visualization.ipynb 4
-from .utils import *
-from .dataloaders import *
-from .models import *
-from .initialization import *
-from .trainer import *
-from .training import *
-from .recording import *
+from isaacai.utils import *
+from isaacai.dataloaders import *
+from isaacai.models import *
+from isaacai.initialization import *
+from isaacai.trainer import *
+from isaacai.training import *
+from isaacai.recording import *
 
 import fastcore.all as fc
 from torch.optim.lr_scheduler import ExponentialLR
 import math
-from .utils import *
-from .dataloaders import *
-from .models import *
-from .training import *
+from isaacai.utils import *
+from isaacai.dataloaders import *
+from isaacai.models import *
+from isaacai.training import *
 import torch.nn as nn
 import torch
 import matplotlib.pyplot as plt,matplotlib as mpl

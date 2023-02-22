@@ -5,10 +5,10 @@ __all__ = ['cb_steps', 'CancelFitException', 'CancelBatchException', 'CancelEpoc
            'Trainer']
 
 # %% ../nbs/40_trainer.ipynb 4
-from .utils import *
-from .dataloaders import *
-from .models import *
-from .initialization import *
+from isaacai.utils import *
+from isaacai.dataloaders import *
+from isaacai.models import *
+from isaacai.initialization import *
 
 from datetime import datetime, timedelta
 import torchvision.transforms.functional as TF,torch.nn.functional as F
