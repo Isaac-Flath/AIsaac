@@ -5,10 +5,10 @@ __all__ = ['cb_steps', 'CancelFitException', 'CancelBatchException', 'CancelEpoc
            'Trainer']
 
 # %% ../nbs/40_trainer.ipynb 4
-from isaacai.utils import *
-from isaacai.dataloaders import *
-from isaacai.models import *
-from isaacai.initialization import *
+from .utils import *
+from .dataloaders import *
+from .models import *
+from .initialization import *
 
 from datetime import datetime, timedelta
 import torchvision.transforms.functional as TF,torch.nn.functional as F
@@ -59,12 +59,9 @@ def summarize_callbacks(trainer):
 
 # %% ../nbs/40_trainer.ipynb 16
 class Trainer:
-    def subclassing_method(self,**kwargs): pass
-
-    def __init__(self, dls, loss_func, opt_func, model, callbacks, **kwargs):
+    def __init__(self, dls, loss_func, opt_func, model, callbacks):
         self.add_callbacks(callbacks)
         fc.store_attr(but='callbacks')
-        self.subclassing_method(**kwargs)
             
     @with_cbs('batch', CancelBatchException)
     def one_batch(self):
@@ -95,7 +92,7 @@ class Trainer:
             self.epochs = range(self.n_epochs)
             self._fit(train,valid)
         finally:
-            self.callbacks = [o for o in self.callbacks if o not in fc.L(callbacks)]
+            self.callbacks = [o for o in self.callbacks if o not in [o.__class__.__name__ for o in callbacks]]
                                                         
     @property
     def training(self): return self.model.training

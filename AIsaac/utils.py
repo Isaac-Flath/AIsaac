@@ -3,8 +3,8 @@
 # %% auto 0
 __all__ = ['def_device', 'set_seed', 'inplace', 'mask2idxs', 'PPDict', 'retrieve_global_name', 'clean_ipython_hist',
            'clean_traceback', 'clean_memory', 'to_device', 'to_cpu', 'show_image', 'subplots', 'get_grid',
-           'run_callbacks', 'add_callback', 'add_callbacks', 'remove_callback', 'remove_callbacks', 'with_cbs', 'Hook',
-           'Hooks']
+           'show_images', 'run_callbacks', 'add_callback', 'add_callbacks', 'remove_callback', 'remove_callbacks',
+           'with_cbs', 'Hook', 'Hooks']
 
 # %% ../nbs/00_utils.ipynb 4
 import fastcore.all as fc
@@ -91,7 +91,7 @@ def clean_memory():
 # %% ../nbs/00_utils.ipynb 17
 def_device = 'mps' if torch.backends.mps.is_available() else 'cuda' if torch.cuda.is_available() else 'cpu'
 
-def to_device(x, device=def_device):
+def to_device(x:torch.tensor, device=def_device):
     if isinstance(x, torch.Tensor): return x.to(device)
     if isinstance(x, Mapping): return {k:v.to(device) for k,v in x.items()}
     return type(x)(to_device(o, device) for o in x)
@@ -123,7 +123,7 @@ def show_image(im, ax=None, figsize=None, title=None, noframe=True, **kwargs):
     if noframe: ax.axis('off')
     return ax
 
-# %% ../nbs/00_utils.ipynb 20
+# %% ../nbs/00_utils.ipynb 21
 @fc.delegates(plt.subplots, keep=True)
 def subplots(
     nrows:int=1, # Number of rows in returned axes grid
@@ -140,7 +140,7 @@ def subplots(
     if nrows*ncols==1: ax = np.array([ax])
     return fig,ax
 
-# %% ../nbs/00_utils.ipynb 21
+# %% ../nbs/00_utils.ipynb 22
 @fc.delegates(subplots)
 def get_grid(
     n:int, # Number of axes
@@ -163,12 +163,23 @@ def get_grid(
     return fig,axs
 
 # %% ../nbs/00_utils.ipynb 23
+@fc.delegates(subplots)
+def show_images(ims:list, # Images to show
+                nrows:int|None=None, # Number of rows in grid
+                ncols:int|None=None, # Number of columns in grid (auto-calculated if None)
+                titles:list|None=None, # Optional list of titles for each image
+                **kwargs):
+    "Show all images `ims` as subplots with `rows` using `titles`"
+    axs = get_grid(len(ims), nrows, ncols, **kwargs)[1].flat
+    for im,t,ax in zip_longest(ims, titles or [], axs): show_image(im, ax=ax, title=t)
+
+# %% ../nbs/00_utils.ipynb 26
 def run_callbacks(callbacks, method_name, trainer=None):
     for callback in sorted(callbacks, key=lambda x: getattr(x, 'order',0)):
         callback_method = getattr(callback, method_name,None)
         if callback_method is not None: callback_method(trainer)
 
-# %% ../nbs/00_utils.ipynb 24
+# %% ../nbs/00_utils.ipynb 27
 def add_callback(trainer,callback,force=False):
     trainer.callbacks = getattr(trainer,'callbacks',fc.L())
     if callback is None: return None
@@ -189,7 +200,7 @@ def add_callbacks(trainer,callbacks,force=False):
     trainer.callbacks = getattr(trainer,'callbacks',fc.L())
     for callback in callbacks: add_callback(trainer,callback, force)
 
-# %% ../nbs/00_utils.ipynb 25
+# %% ../nbs/00_utils.ipynb 28
 def remove_callback(trainer,callback,delete=False):
     cb_name = callback.__class__.__name__
     trainer.callbacks.remove(cb_name)
@@ -198,7 +209,7 @@ def remove_callback(trainer,callback,delete=False):
 def remove_callbacks(trainer,callbacks,delete=False):
     for callback in callbacks: remove_callback(trainer, callback, delete)
 
-# %% ../nbs/00_utils.ipynb 26
+# %% ../nbs/00_utils.ipynb 29
 class with_cbs:
     def __init__(self, nm, exception): fc.store_attr()
     def __call__(self, f):
@@ -211,13 +222,13 @@ class with_cbs:
             finally: o.run_callbacks(f'cleanup_{self.nm}')
         return _f
 
-# %% ../nbs/00_utils.ipynb 30
+# %% ../nbs/00_utils.ipynb 33
 class Hook:
     def __init__(self,module,func): self.hook = module.register_forward_hook(fc.bind(func,self))
     def __del__(self): self.hook.remove()
     def remove(self): self.hook.remove()
 
-# %% ../nbs/00_utils.ipynb 31
+# %% ../nbs/00_utils.ipynb 34
 class Hooks(list):
     def __init__(self,modules, func): super().__init__([Hook(module,func) for module in modules])
     def __enter__(self): return self

@@ -4,14 +4,14 @@
 __all__ = ['CoreCBs']
 
 # %% ../nbs/49_cb_groups.ipynb 4
-from isaacai.utils import *
-from isaacai.dataloaders import *
-from isaacai.models import *
-from isaacai.initialization import *
-from isaacai.trainer import *
-from isaacai.training import *
-from isaacai.recording import *
-from isaacai.visualization import *
+from .utils import *
+from .dataloaders import *
+from .models import *
+from .initialization import *
+from .trainer import *
+from .training import *
+from .recording import *
+from .visualization import *
 
 from datetime import datetime, timedelta
 import torchvision.transforms.functional as TF,torch.nn.functional as F
@@ -42,5 +42,3 @@ class CoreCBs(Callback):
                           MetricsCB(**metrics),
                           ProgressCB(),
                           ActivationStatsCB(module_filter)]
-        
-

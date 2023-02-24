@@ -4,7 +4,7 @@
 __all__ = ['get_dataloaders', 'collate_dataset_dict', 'DataLoaders', 'sample_dataset_dict']
 
 # %% ../nbs/10_dataloaders.ipynb 4
-from isaacai.utils import *
+from .utils import *
 import pandas as pd, numpy as np, fastcore.all as fc
 import matplotlib.pyplot as plt,matplotlib as mpl
 import random

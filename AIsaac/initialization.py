@@ -4,9 +4,9 @@
 __all__ = ['lsuv_init']
 
 # %% ../nbs/21_initialization.ipynb 4
-from isaacai.utils import *
-from isaacai.dataloaders import *
-from isaacai.models import *
+from .utils import *
+from .dataloaders import *
+from .models import *
 
 from datetime import datetime, timedelta
 import torchvision.transforms.functional as TF,torch.nn.functional as F

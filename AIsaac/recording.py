@@ -4,12 +4,12 @@
 __all__ = ['MetricsCB', 'ProgressCB']
 
 # %% ../nbs/42_recording.ipynb 4
-from isaacai.utils import *
-from isaacai.dataloaders import *
-from isaacai.models import *
-from isaacai.initialization import *
-from isaacai.trainer import *
-from isaacai.training import *
+from .utils import *
+from .dataloaders import *
+from .models import *
+from .initialization import *
+from .trainer import *
+from .training import *
 
 from datetime import datetime, timedelta
 import torchvision.transforms.functional as TF,torch.nn.functional as F
@@ -31,7 +31,7 @@ from fastprogress.fastprogress import master_bar, progress_bar
 import inspect
 import torchinfo
 
-# %% ../nbs/42_recording.ipynb 11
+# %% ../nbs/42_recording.ipynb 10
 class MetricsCB(Callback):
     '''Callback to track train/valid loss + metrics'''
     def __init__(self, **metrics):
@@ -56,7 +56,7 @@ class MetricsCB(Callback):
             for metric in self.metrics.values(): metric.reset()
             for metric in self.losses.values(): metric.reset()
 
-# %% ../nbs/42_recording.ipynb 15
+# %% ../nbs/42_recording.ipynb 14
 class ProgressCB(Callback):
     '''Callback to display progress while training'''
         

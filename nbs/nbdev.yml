@@ -2,8 +2,8 @@ project:
   output-dir: _docs
 
 website:
-  title: "isaacai"
-  site-url: "https://Isaac-Flath.github.io/isaacai"
+  title: "AIsaac"
+  site-url: "https://Isaac-Flath.github.io/AIsaac"
   description: "Library for dl"
   repo-branch: main
-  repo-url: "https://github.com/Isaac-Flath/isaacai"
+  repo-url: "https://github.com/Isaac-Flath/AIsaac"
