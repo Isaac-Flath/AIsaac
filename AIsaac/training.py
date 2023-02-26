@@ -2,7 +2,7 @@
 
 # %% auto 0
 __all__ = ['OneBatchCB', 'BasicTrainCB', 'DeviceCB', 'MomentumTrainCB', 'BaseSchedulerCB', 'BatchSchedulerCB', 'EpochSchedulerCB',
-           'OneCycleSchedulerCB']
+           'OneCycleSchedulerCB', 'AccelerateCB']
 
 # %% ../nbs/41_training.ipynb 4
 from .utils import *
@@ -95,3 +95,19 @@ class OneCycleSchedulerCB(BatchSchedulerCB):
         '''Initializes Scheduler'''
         total_steps = trainer.n_epochs*len(trainer.dls.train)
         self.scheduler = self.scheduler_func(trainer.opt, max_lr=trainer.lr, total_steps=total_steps,**self.scheduler_kwargs)
+
+# %% ../nbs/41_training.ipynb 23
+class AccelerateCB(BasicTrainCB):
+    order = DeviceCB.order+10
+    def __init__(self, mixed_precision="fp16"):
+        self.acc = Accelerator(mixed_precision=mixed_precision)
+        
+    def before_fit(self, trainer):
+        '''Wraps model, opt, data in accelerate'''
+        trainer.model,trainer.opt,trainer.dls.train,trainer.dls.valid = self.acc.prepare(
+            trainer.model, trainer.opt, trainer.dls.train, trainer.dls.valid)
+
+        
+    def backward(self, trainer): 
+        '''Using accelerate for backward pass'''
+        self.acc.backward(trainer.loss)

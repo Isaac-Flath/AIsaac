@@ -92,7 +92,7 @@ class Trainer:
             self.epochs = range(self.n_epochs)
             self._fit(train,valid)
         finally:
-            self.callbacks = [o for o in self.callbacks if o not in [o.__class__.__name__ for o in callbacks]]
+            self.callbacks = [o for o in self.callbacks if o not in [o.__class__.__name__ for o in fc.L(callbacks)]]
                                                         
     @property
     def training(self): return self.model.training
