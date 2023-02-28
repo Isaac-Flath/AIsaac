@@ -1,0 +1,2009 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>AIsaac - Dreambooth</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="AIsaac - Dreambooth">
+<meta property="og:site-name" content="AIsaac">
+<meta name="twitter:title" content="AIsaac - Dreambooth">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">AIsaac</span>
+    </a>
+  </div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Dreambooth</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">AIsaac</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../utils.html" class="sidebar-item-text sidebar-link">utils</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../dataloaders.html" class="sidebar-item-text sidebar-link">dataloaders</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../models.html" class="sidebar-item-text sidebar-link">models</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../initialization.html" class="sidebar-item-text sidebar-link">training</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../trainer.html" class="sidebar-item-text sidebar-link">trainer</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../training.html" class="sidebar-item-text sidebar-link">training</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../recording.html" class="sidebar-item-text sidebar-link">Recording</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../visualization.html" class="sidebar-item-text sidebar-link">visalizations</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../augmentation.html" class="sidebar-item-text sidebar-link">Recording</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../cb_groups.html" class="sidebar-item-text sidebar-link">Recording</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Untitled.html" class="sidebar-item-text sidebar-link">Untitled.html</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Untitled1.html" class="sidebar-item-text sidebar-link">Untitled1.html</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Tutorials</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Tutorials/callbacks.html" class="sidebar-item-text sidebar-link">Callbacks</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Tutorials/dreambooth.html" class="sidebar-item-text sidebar-link active">Dreambooth</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Tutorials/vision.html" class="sidebar-item-text sidebar-link">Fashion MNIST</a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#imports" id="toc-imports" class="nav-link active" data-scroll-target="#imports">Imports</a></li>
+  <li><a href="#utils" id="toc-utils" class="nav-link" data-scroll-target="#utils">Utils</a></li>
+  <li><a href="#generate-class-images" id="toc-generate-class-images" class="nav-link" data-scroll-target="#generate-class-images">Generate Class Images</a></li>
+  <li><a href="#fine-tuning" id="toc-fine-tuning" class="nav-link" data-scroll-target="#fine-tuning">Fine Tuning</a></li>
+  <li><a href="#save-model" id="toc-save-model" class="nav-link" data-scroll-target="#save-model">Save Model</a></li>
+  <li><a href="#generate-new-images" id="toc-generate-new-images" class="nav-link" data-scroll-target="#generate-new-images">Generate New Images</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/Isaac-Flath/AIsaac/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Dreambooth</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<section id="imports" class="level2">
+<h2 class="anchored" data-anchor-id="imports">Imports</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> AIsaac.<span class="bu">all</span> <span class="im">import</span> <span class="op">*</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> fastcore.<span class="bu">all</span> <span class="im">as</span> fc</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch <span class="im">import</span> nn</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch.utils.data <span class="im">import</span> Dataset</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datasets <span class="im">import</span> load_dataset</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> transformers <span class="im">import</span> AutoTokenizer, PretrainedConfig,CLIPTextModel</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> accelerate <span class="im">import</span> Accelerator</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> xformers <span class="co"># May need dev version</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> diffusers <span class="im">import</span> AutoencoderKL, DDPMScheduler, DiffusionPipeline, UNet2DConditionModel, StableDiffusionPipeline</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> diffusers.optimization <span class="im">import</span> get_scheduler</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> functools <span class="im">import</span> partial</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torchvision</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchvision <span class="im">import</span> transforms</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torchvision.transforms.functional <span class="im">as</span> TF</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> PIL <span class="im">import</span> Image</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> itertools, math, hashlib, random</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> itertools <span class="im">import</span> zip_longest</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> clear_output</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/home/python3.10/lib/python3.10/site-packages/tqdm/auto.py:22: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+A matching Triton is not available, some optimizations will not be enabled.
+Error caught was: No module named 'triton'</code></pre>
+</div>
+</div>
+</section>
+<section id="utils" class="level2">
+<h2 class="anchored" data-anchor-id="utils">Utils</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> decode(tokenizer, tokens, start_after<span class="op">=</span><span class="st">'&lt;|startoftext|&gt;'</span>, end_at<span class="op">=</span><span class="st">'&lt;|endoftext|&gt;'</span>):</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    _decoded <span class="op">=</span> ds.tokenizer.decode(tokens)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> _decoded[<span class="bu">len</span>(start_after):_decoded.find(end_at)].strip()</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>denorm <span class="op">=</span> UnNormalize([<span class="fl">.5</span>],[<span class="fl">.5</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pretrained_model<span class="op">=</span><span class="st">"CompVis/stable-diffusion-v1-4"</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>cls_img_dir <span class="op">=</span> Path(<span class="st">"dreambooth/class"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>img_dir <span class="op">=</span> Path(<span class="st">"dreambooth/cropped"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="generate-class-images" class="level2">
+<h2 class="anchored" data-anchor-id="generate-class-images">Generate Class Images</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> hash_img(img): <span class="cf">return</span> hashlib.sha1(img.tobytes()).hexdigest()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>pipeline <span class="op">=</span> DiffusionPipeline.from_pretrained(pretrained_model,</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                        torch_dtype<span class="op">=</span>torch.float32,safety_checker<span class="op">=</span><span class="va">None</span>,revision<span class="op">=</span><span class="va">None</span>).to(<span class="st">"cuda"</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>):</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    images <span class="op">=</span> pipeline([<span class="st">"a photo of dog"</span>]<span class="op">*</span><span class="dv">8</span>).images</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    path <span class="op">=</span> cls_img_dir <span class="op">/</span> (<span class="st">'train'</span> <span class="cf">if</span> random.random()<span class="op">&lt;</span><span class="fl">0.8</span> <span class="cf">else</span> <span class="st">'valid'</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, image <span class="kw">in</span> <span class="bu">enumerate</span>(images): image.save(path<span class="op">/</span><span class="ss">f"</span><span class="sc">{</span>hash_img(image)<span class="sc">}</span><span class="ss">.jpg"</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> pipeline</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>clean_memory()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="fine-tuning" class="level2">
+<h2 class="anchored" data-anchor-id="fine-tuning">Fine Tuning</h2>
+<section id="data-loading" class="level4">
+<h4 class="anchored" data-anchor-id="data-loading">Data Loading</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> transform(image,xmean<span class="op">=</span><span class="fl">0.5</span>,xstd<span class="op">=</span><span class="fl">0.5</span>): <span class="cf">return</span> (TF.to_tensor(TF.resize(image,<span class="dv">512</span>))<span class="op">-</span>xmean)<span class="op">/</span>xstd</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> DBDataset(Dataset):</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, class_imgs, class_prompt, main_imgs, main_prompt): </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        fc.store_attr(<span class="st">'class_imgs,class_prompt,main_imgs,main_prompt'</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__len__</span>(<span class="va">self</span>): <span class="cf">return</span> <span class="bu">len</span>(<span class="va">self</span>.main_imgs)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__getitem__</span>(<span class="va">self</span>, idx):</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>        cls_img, main_img <span class="op">=</span> <span class="bu">map</span>(Image.<span class="bu">open</span>,[<span class="va">self</span>.class_imgs[idx],<span class="va">self</span>.main_imgs[idx]])</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        cls_img, main_img <span class="op">=</span> <span class="bu">map</span>(transform,[cls_img, main_img])               </span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (torch.stack([main_img,cls_img]), </span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>                (<span class="va">self</span>.main_prompt,<span class="va">self</span>.class_prompt))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>trn_ds <span class="op">=</span> DBDataset(get_images(cls_img_dir<span class="op">/</span><span class="st">'train'</span>),<span class="st">"a photo of dog"</span>,get_images(img_dir<span class="op">/</span><span class="st">'train'</span>),<span class="st">"a photo of sks dog"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>val_ds <span class="op">=</span> DBDataset(get_images(cls_img_dir<span class="op">/</span><span class="st">'valid'</span>)[:<span class="dv">10</span>],<span class="st">"a photo of dog"</span>,get_images(img_dir<span class="op">/</span><span class="st">'valid'</span>),<span class="st">"a photo of sks dog"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch.utils.data <span class="im">import</span> DataLoader</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>dls <span class="op">=</span> DataLoaders(<span class="op">*</span><span class="bu">map</span>(partial(DataLoader,batch_size<span class="op">=</span><span class="va">None</span>),[trn_ds,val_ds]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="data-augmentation" class="level4">
+<h4 class="anchored" data-anchor-id="data-augmentation">Data Augmentation</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>img_tfms <span class="op">=</span> transforms.Compose([transforms.RandomCrop(<span class="dv">512</span>),</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                               transforms.Normalize([<span class="fl">0.5</span>], [<span class="fl">0.5</span>])])</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>tokenizer <span class="op">=</span> AutoTokenizer.from_pretrained(pretrained_model,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>                                          subfolder<span class="op">=</span><span class="st">"tokenizer"</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>                                          revision<span class="op">=</span><span class="va">None</span>,use_fast<span class="op">=</span><span class="va">False</span>,)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> lbl_tfms(yb,tokenizer<span class="op">=</span>tokenizer):</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    out <span class="op">=</span> tokenizer(yb,</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>                    truncation<span class="op">=</span><span class="va">True</span>, padding<span class="op">=</span><span class="st">"max_length"</span>,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>                    max_length<span class="op">=</span>tokenizer.model_max_length,</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>                    return_tensors<span class="op">=</span><span class="st">"pt"</span>,)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> out.input_ids</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="model" class="level4">
+<h4 class="anchored" data-anchor-id="model">Model</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> DreamBoothModel(nn.Module):</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>): </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.unet <span class="op">=</span> UNet2DConditionModel.from_pretrained(pretrained_model, </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>                                                         subfolder<span class="op">=</span><span class="st">"unet"</span>, </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>                                                         revision<span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.text_encoder <span class="op">=</span> CLIPTextModel.from_pretrained(pretrained_model, </span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>                                                          subfolder<span class="op">=</span><span class="st">"text_encoder"</span>, </span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>                                                          revision<span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>,x):        </span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>        encoder_hidden_states <span class="op">=</span> <span class="va">self</span>.text_encoder(x[<span class="dv">1</span>])[<span class="dv">0</span>]</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.unet(x[<span class="dv">5</span>], x[<span class="dv">4</span>], encoder_hidden_states).sample.<span class="bu">float</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="training-cb" class="level4">
+<h4 class="anchored" data-anchor-id="training-cb">Training CB</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> DreamBoothTrainCB(AccelerateCB):</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, mixed_precision<span class="op">=</span><span class="st">"fp16"</span>,class_image_weight<span class="op">=</span><span class="fl">0.5</span>):</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.class_image_weight <span class="op">=</span> class_image_weight</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.acc <span class="op">=</span> Accelerator(mixed_precision<span class="op">=</span>mixed_precision)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> before_fit(<span class="va">self</span>, trainer):</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>        <span class="co">'''Wraps model, opt, data in accelerate'''</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>        trainer.model,trainer.opt,trainer.dls.train,trainer.dls.valid <span class="op">=</span> <span class="va">self</span>.acc.prepare(</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>                 trainer.model, trainer.opt, trainer.dls.train, trainer.dls.valid)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>        trainer.noise_scheduler <span class="op">=</span> DDPMScheduler.from_pretrained(pretrained_model, subfolder<span class="op">=</span><span class="st">"scheduler"</span>)</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>        trainer.vae <span class="op">=</span> AutoencoderKL.from_pretrained(pretrained_model, subfolder<span class="op">=</span><span class="st">"vae"</span>, revision<span class="op">=</span><span class="va">None</span>)        </span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>        trainer.vae.requires_grad_(<span class="va">False</span>)</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>        trainer.vae.to(<span class="va">self</span>.acc.device, dtype<span class="op">=</span>torch.float16)</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> before_batch(<span class="va">self</span>,trainer):</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>        <span class="co">'''Calculates latents, noise, timesteps, noisy_latents'''</span>        </span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>        vae, scaling_factor <span class="op">=</span> trainer.vae, trainer.vae.config.scaling_factor</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>        trainer.batch.append(vae.encode(trainer.batch[<span class="dv">0</span>].to(dtype<span class="op">=</span>torch.float16)).latent_dist.sample()<span class="op">*</span>scaling_factor )</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>        trainer.batch[<span class="dv">0</span>] <span class="op">=</span> to_cpu(trainer.batch[<span class="dv">0</span>]) </span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>        trainer.batch.append(torch.randn_like(trainer.batch[<span class="dv">2</span>]).<span class="bu">float</span>())</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>        num_ts <span class="op">=</span> trainer.noise_scheduler.config.num_train_timesteps</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>        trainer.batch.append(torch.randint(<span class="dv">0</span>, num_ts, (trainer.batch[<span class="dv">2</span>].shape[<span class="dv">0</span>],), device<span class="op">=</span>trainer.batch[<span class="dv">2</span>].device))</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>        trainer.batch.append(trainer.noise_scheduler.add_noise(trainer.batch[<span class="dv">2</span>], trainer.batch[<span class="dv">3</span>], trainer.batch[<span class="dv">4</span>]))</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> predict(<span class="va">self</span>,trainer): trainer.preds <span class="op">=</span> trainer.model(trainer.batch)</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_loss(<span class="va">self</span>,trainer): </span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>        <span class="co">'''Calculates loss for instance and class images'''</span></span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>        model_pred, model_pred_prior <span class="op">=</span> torch.chunk(trainer.preds, <span class="dv">2</span>, dim<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>        target, target_prior <span class="op">=</span> torch.chunk(trainer.batch[<span class="dv">3</span>], <span class="dv">2</span>, dim<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>        loss <span class="op">=</span> trainer.loss_func(model_pred,target, reduction<span class="op">=</span><span class="st">"mean"</span>)</span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>        prior_loss <span class="op">=</span> trainer.loss_func(model_pred_prior, target_prior, reduction<span class="op">=</span><span class="st">"mean"</span>)</span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>        trainer.loss <span class="op">=</span> ((<span class="dv">1</span> <span class="op">-</span> <span class="va">self</span>.class_image_weight) <span class="op">*</span> loss) <span class="op">+</span>  (<span class="va">self</span>.class_image_weight <span class="op">*</span> prior_loss)</span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> backward(<span class="va">self</span>,trainer):</span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>        <span class="co">'''backward pass + clip_grad'''</span></span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.acc.backward(trainer.loss)</span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="va">self</span>.acc.sync_gradients: <span class="va">self</span>.acc.clip_grad_norm_(trainer.model.parameters(), <span class="fl">1.</span>)</span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a>   </span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> zero_grad(<span class="va">self</span>,trainer): trainer.opt.zero_grad(set_to_none<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="fine-tune" class="level4">
+<h4 class="anchored" data-anchor-id="fine-tune">Fine Tune</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>trainer <span class="op">=</span> Trainer(dls,fc.bind(F.mse_loss,reduction<span class="op">=</span><span class="st">"mean"</span>),torch.optim.AdamW,</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                    DreamBoothModel(),</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                    callbacks<span class="op">=</span>[DreamBoothTrainCB(class_image_weight<span class="op">=</span><span class="fl">.25</span>),</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                               OneCycleSchedulerCB(),</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>                               BatchAugmentationCB((img_tfms,lbl_tfms)),</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>                               DeviceCB(),</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>                               MetricsCB(),</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>                               ProgressCB()]</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>                 )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">'display.max_colwidth'</span>, <span class="va">None</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>trainer.summarize_callbacks()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Step</th>
+      <th>Callback</th>
+      <th>Doc String</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th></th>
+      <td>before_fit</td>
+      <td>OneCycleSchedulerCB</td>
+      <td>Initializes Scheduler</td>
+    </tr>
+    <tr>
+      <th></th>
+      <td>before_fit</td>
+      <td>DeviceCB</td>
+      <td>Moves model to device</td>
+    </tr>
+    <tr>
+      <th></th>
+      <td>before_fit</td>
+      <td>ProgressCB</td>
+      <td>Initialize Fit Progress Bar</td>
+    </tr>
+    <tr>
+      <th></th>
+      <td>before_fit</td>
+      <td>DreamBoothTrainCB</td>
+      <td>Wraps model, opt, data in accelerate</td>
+    </tr>
+    <tr>
+      <th></th>
+      <td>before_epoch</td>
+      <td>ProgressCB</td>
+      <td>Initialize Epoch Progress Bar</td>
+    </tr>
+    <tr>
+      <th></th>
+      <td>before_batch</td>
+      <td>BatchAugmentationCB</td>
+      <td>applies tfms in tfms list to appropriate items in batch</td>
+    </tr>
+    <tr>
+      <th></th>
+      <td>before_batch</td>
+      <td>DeviceCB</td>
+      <td>moves batch to device</td>
+    </tr>
+    <tr>
+      <th></th>
+      <td>before_batch</td>
+      <td>DreamBoothTrainCB</td>
+      <td>Calculates latents, noise, timesteps, noisy_latents</td>
+    </tr>
+    <tr>
+      <th></th>
+      <td>predict</td>
+      <td>DreamBoothTrainCB</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th></th>
+      <td>get_loss</td>
+      <td>DreamBoothTrainCB</td>
+      <td>Calculates loss for instance and class images</td>
+    </tr>
+    <tr>
+      <th></th>
+      <td>backward</td>
+      <td>DreamBoothTrainCB</td>
+      <td>backward pass + clip_grad</td>
+    </tr>
+    <tr>
+      <th></th>
+      <td>step</td>
+      <td>DreamBoothTrainCB</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th></th>
+      <td>zero_grad</td>
+      <td>DreamBoothTrainCB</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th></th>
+      <td>after_batch</td>
+      <td>OneCycleSchedulerCB</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th></th>
+      <td>after_batch</td>
+      <td>MetricsCB</td>
+      <td>stores losses and metrics for batch</td>
+    </tr>
+    <tr>
+      <th></th>
+      <td>cleanup_epoch</td>
+      <td>MetricsCB</td>
+      <td>compute metrics and append to epoch stats and display</td>
+    </tr>
+    <tr>
+      <th></th>
+      <td>cleanup_epoch</td>
+      <td>ProgressCB</td>
+      <td>Display Loss and Metric</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>trainer.fit(<span class="dv">50</span>,lr<span class="op">=</span><span class="fl">5e-6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div>
+<div class="cell-output cell-output-display">
+
+</div>
+<div class="cell-output cell-output-display">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>train</th>
+      <th>valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.125696</td>
+      <td>0.230318</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_af129 thead {
+  display: none;
+}
+</style>
+<table id="T_af129">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_af129_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_af129_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_af129_level0_row0" class="row_heading level0 row0">1</th>
+      <td id="T_af129_row0_col0" class="data row0 col0">0.232612</td>
+      <td id="T_af129_row0_col1" class="data row0 col1">0.123332</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_c28aa thead {
+  display: none;
+}
+</style>
+<table id="T_c28aa">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_c28aa_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_c28aa_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_c28aa_level0_row0" class="row_heading level0 row0">2</th>
+      <td id="T_c28aa_row0_col0" class="data row0 col0">0.066541</td>
+      <td id="T_c28aa_row0_col1" class="data row0 col1">0.182517</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_72176 thead {
+  display: none;
+}
+</style>
+<table id="T_72176">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_72176_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_72176_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_72176_level0_row0" class="row_heading level0 row0">3</th>
+      <td id="T_72176_row0_col0" class="data row0 col0">0.161011</td>
+      <td id="T_72176_row0_col1" class="data row0 col1">0.098295</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_26210 thead {
+  display: none;
+}
+</style>
+<table id="T_26210">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_26210_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_26210_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_26210_level0_row0" class="row_heading level0 row0">4</th>
+      <td id="T_26210_row0_col0" class="data row0 col0">0.112926</td>
+      <td id="T_26210_row0_col1" class="data row0 col1">0.091012</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_ca4f1 thead {
+  display: none;
+}
+</style>
+<table id="T_ca4f1">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_ca4f1_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_ca4f1_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_ca4f1_level0_row0" class="row_heading level0 row0">5</th>
+      <td id="T_ca4f1_row0_col0" class="data row0 col0">0.185095</td>
+      <td id="T_ca4f1_row0_col1" class="data row0 col1">0.196490</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_9825a thead {
+  display: none;
+}
+</style>
+<table id="T_9825a">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_9825a_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_9825a_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_9825a_level0_row0" class="row_heading level0 row0">6</th>
+      <td id="T_9825a_row0_col0" class="data row0 col0">0.101598</td>
+      <td id="T_9825a_row0_col1" class="data row0 col1">0.122647</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_560a5 thead {
+  display: none;
+}
+</style>
+<table id="T_560a5">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_560a5_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_560a5_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_560a5_level0_row0" class="row_heading level0 row0">7</th>
+      <td id="T_560a5_row0_col0" class="data row0 col0">0.106308</td>
+      <td id="T_560a5_row0_col1" class="data row0 col1">0.091670</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_9fcec thead {
+  display: none;
+}
+</style>
+<table id="T_9fcec">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_9fcec_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_9fcec_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_9fcec_level0_row0" class="row_heading level0 row0">8</th>
+      <td id="T_9fcec_row0_col0" class="data row0 col0">0.169324</td>
+      <td id="T_9fcec_row0_col1" class="data row0 col1">0.082453</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_83f43 thead {
+  display: none;
+}
+</style>
+<table id="T_83f43">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_83f43_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_83f43_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_83f43_level0_row0" class="row_heading level0 row0">9</th>
+      <td id="T_83f43_row0_col0" class="data row0 col0">0.107214</td>
+      <td id="T_83f43_row0_col1" class="data row0 col1">0.180169</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_cee25 thead {
+  display: none;
+}
+</style>
+<table id="T_cee25">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_cee25_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_cee25_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_cee25_level0_row0" class="row_heading level0 row0">10</th>
+      <td id="T_cee25_row0_col0" class="data row0 col0">0.118429</td>
+      <td id="T_cee25_row0_col1" class="data row0 col1">0.126893</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_52379 thead {
+  display: none;
+}
+</style>
+<table id="T_52379">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_52379_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_52379_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_52379_level0_row0" class="row_heading level0 row0">11</th>
+      <td id="T_52379_row0_col0" class="data row0 col0">0.181714</td>
+      <td id="T_52379_row0_col1" class="data row0 col1">0.133622</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_66e83 thead {
+  display: none;
+}
+</style>
+<table id="T_66e83">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_66e83_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_66e83_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_66e83_level0_row0" class="row_heading level0 row0">12</th>
+      <td id="T_66e83_row0_col0" class="data row0 col0">0.159709</td>
+      <td id="T_66e83_row0_col1" class="data row0 col1">0.097678</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_7cd17 thead {
+  display: none;
+}
+</style>
+<table id="T_7cd17">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_7cd17_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_7cd17_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_7cd17_level0_row0" class="row_heading level0 row0">13</th>
+      <td id="T_7cd17_row0_col0" class="data row0 col0">0.235059</td>
+      <td id="T_7cd17_row0_col1" class="data row0 col1">0.057040</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_97c4f thead {
+  display: none;
+}
+</style>
+<table id="T_97c4f">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_97c4f_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_97c4f_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_97c4f_level0_row0" class="row_heading level0 row0">14</th>
+      <td id="T_97c4f_row0_col0" class="data row0 col0">0.072090</td>
+      <td id="T_97c4f_row0_col1" class="data row0 col1">0.101951</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_3a0c2 thead {
+  display: none;
+}
+</style>
+<table id="T_3a0c2">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_3a0c2_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_3a0c2_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_3a0c2_level0_row0" class="row_heading level0 row0">15</th>
+      <td id="T_3a0c2_row0_col0" class="data row0 col0">0.153997</td>
+      <td id="T_3a0c2_row0_col1" class="data row0 col1">0.150678</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_e56d9 thead {
+  display: none;
+}
+</style>
+<table id="T_e56d9">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_e56d9_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_e56d9_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_e56d9_level0_row0" class="row_heading level0 row0">16</th>
+      <td id="T_e56d9_row0_col0" class="data row0 col0">0.110091</td>
+      <td id="T_e56d9_row0_col1" class="data row0 col1">0.086789</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_fe3ff thead {
+  display: none;
+}
+</style>
+<table id="T_fe3ff">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_fe3ff_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_fe3ff_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_fe3ff_level0_row0" class="row_heading level0 row0">17</th>
+      <td id="T_fe3ff_row0_col0" class="data row0 col0">0.141006</td>
+      <td id="T_fe3ff_row0_col1" class="data row0 col1">0.186996</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_6578f thead {
+  display: none;
+}
+</style>
+<table id="T_6578f">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_6578f_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_6578f_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_6578f_level0_row0" class="row_heading level0 row0">18</th>
+      <td id="T_6578f_row0_col0" class="data row0 col0">0.218605</td>
+      <td id="T_6578f_row0_col1" class="data row0 col1">0.127136</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_6ae49 thead {
+  display: none;
+}
+</style>
+<table id="T_6ae49">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_6ae49_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_6ae49_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_6ae49_level0_row0" class="row_heading level0 row0">19</th>
+      <td id="T_6ae49_row0_col0" class="data row0 col0">0.084883</td>
+      <td id="T_6ae49_row0_col1" class="data row0 col1">0.158228</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_119e7 thead {
+  display: none;
+}
+</style>
+<table id="T_119e7">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_119e7_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_119e7_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_119e7_level0_row0" class="row_heading level0 row0">20</th>
+      <td id="T_119e7_row0_col0" class="data row0 col0">0.117560</td>
+      <td id="T_119e7_row0_col1" class="data row0 col1">0.103090</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_16582 thead {
+  display: none;
+}
+</style>
+<table id="T_16582">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_16582_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_16582_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_16582_level0_row0" class="row_heading level0 row0">21</th>
+      <td id="T_16582_row0_col0" class="data row0 col0">0.117552</td>
+      <td id="T_16582_row0_col1" class="data row0 col1">0.185017</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_ca011 thead {
+  display: none;
+}
+</style>
+<table id="T_ca011">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_ca011_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_ca011_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_ca011_level0_row0" class="row_heading level0 row0">22</th>
+      <td id="T_ca011_row0_col0" class="data row0 col0">0.148583</td>
+      <td id="T_ca011_row0_col1" class="data row0 col1">0.104637</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_7cd2d thead {
+  display: none;
+}
+</style>
+<table id="T_7cd2d">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_7cd2d_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_7cd2d_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_7cd2d_level0_row0" class="row_heading level0 row0">23</th>
+      <td id="T_7cd2d_row0_col0" class="data row0 col0">0.173988</td>
+      <td id="T_7cd2d_row0_col1" class="data row0 col1">0.156446</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_537e8 thead {
+  display: none;
+}
+</style>
+<table id="T_537e8">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_537e8_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_537e8_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_537e8_level0_row0" class="row_heading level0 row0">24</th>
+      <td id="T_537e8_row0_col0" class="data row0 col0">0.176349</td>
+      <td id="T_537e8_row0_col1" class="data row0 col1">0.219658</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_67e4f thead {
+  display: none;
+}
+</style>
+<table id="T_67e4f">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_67e4f_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_67e4f_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_67e4f_level0_row0" class="row_heading level0 row0">25</th>
+      <td id="T_67e4f_row0_col0" class="data row0 col0">0.091933</td>
+      <td id="T_67e4f_row0_col1" class="data row0 col1">0.122982</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_9cfa9 thead {
+  display: none;
+}
+</style>
+<table id="T_9cfa9">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_9cfa9_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_9cfa9_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_9cfa9_level0_row0" class="row_heading level0 row0">26</th>
+      <td id="T_9cfa9_row0_col0" class="data row0 col0">0.114160</td>
+      <td id="T_9cfa9_row0_col1" class="data row0 col1">0.142323</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_d026a thead {
+  display: none;
+}
+</style>
+<table id="T_d026a">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_d026a_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_d026a_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_d026a_level0_row0" class="row_heading level0 row0">27</th>
+      <td id="T_d026a_row0_col0" class="data row0 col0">0.127860</td>
+      <td id="T_d026a_row0_col1" class="data row0 col1">0.082527</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_300d6 thead {
+  display: none;
+}
+</style>
+<table id="T_300d6">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_300d6_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_300d6_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_300d6_level0_row0" class="row_heading level0 row0">28</th>
+      <td id="T_300d6_row0_col0" class="data row0 col0">0.173347</td>
+      <td id="T_300d6_row0_col1" class="data row0 col1">0.105327</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_8149f thead {
+  display: none;
+}
+</style>
+<table id="T_8149f">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_8149f_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_8149f_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_8149f_level0_row0" class="row_heading level0 row0">29</th>
+      <td id="T_8149f_row0_col0" class="data row0 col0">0.185406</td>
+      <td id="T_8149f_row0_col1" class="data row0 col1">0.194762</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_c100c thead {
+  display: none;
+}
+</style>
+<table id="T_c100c">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_c100c_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_c100c_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_c100c_level0_row0" class="row_heading level0 row0">30</th>
+      <td id="T_c100c_row0_col0" class="data row0 col0">0.105407</td>
+      <td id="T_c100c_row0_col1" class="data row0 col1">0.102940</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_7d182 thead {
+  display: none;
+}
+</style>
+<table id="T_7d182">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_7d182_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_7d182_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_7d182_level0_row0" class="row_heading level0 row0">31</th>
+      <td id="T_7d182_row0_col0" class="data row0 col0">0.130632</td>
+      <td id="T_7d182_row0_col1" class="data row0 col1">0.227918</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_8564d thead {
+  display: none;
+}
+</style>
+<table id="T_8564d">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_8564d_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_8564d_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_8564d_level0_row0" class="row_heading level0 row0">32</th>
+      <td id="T_8564d_row0_col0" class="data row0 col0">0.140506</td>
+      <td id="T_8564d_row0_col1" class="data row0 col1">0.168911</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_919e3 thead {
+  display: none;
+}
+</style>
+<table id="T_919e3">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_919e3_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_919e3_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_919e3_level0_row0" class="row_heading level0 row0">33</th>
+      <td id="T_919e3_row0_col0" class="data row0 col0">0.046199</td>
+      <td id="T_919e3_row0_col1" class="data row0 col1">0.108546</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_97aef thead {
+  display: none;
+}
+</style>
+<table id="T_97aef">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_97aef_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_97aef_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_97aef_level0_row0" class="row_heading level0 row0">34</th>
+      <td id="T_97aef_row0_col0" class="data row0 col0">0.107185</td>
+      <td id="T_97aef_row0_col1" class="data row0 col1">0.076605</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_ddd3e thead {
+  display: none;
+}
+</style>
+<table id="T_ddd3e">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_ddd3e_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_ddd3e_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_ddd3e_level0_row0" class="row_heading level0 row0">35</th>
+      <td id="T_ddd3e_row0_col0" class="data row0 col0">0.133266</td>
+      <td id="T_ddd3e_row0_col1" class="data row0 col1">0.136607</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_2f16d thead {
+  display: none;
+}
+</style>
+<table id="T_2f16d">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_2f16d_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_2f16d_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_2f16d_level0_row0" class="row_heading level0 row0">36</th>
+      <td id="T_2f16d_row0_col0" class="data row0 col0">0.120615</td>
+      <td id="T_2f16d_row0_col1" class="data row0 col1">0.181331</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_1639b thead {
+  display: none;
+}
+</style>
+<table id="T_1639b">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_1639b_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_1639b_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_1639b_level0_row0" class="row_heading level0 row0">37</th>
+      <td id="T_1639b_row0_col0" class="data row0 col0">0.170491</td>
+      <td id="T_1639b_row0_col1" class="data row0 col1">0.092342</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_88ec9 thead {
+  display: none;
+}
+</style>
+<table id="T_88ec9">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_88ec9_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_88ec9_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_88ec9_level0_row0" class="row_heading level0 row0">38</th>
+      <td id="T_88ec9_row0_col0" class="data row0 col0">0.198938</td>
+      <td id="T_88ec9_row0_col1" class="data row0 col1">0.142778</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_7c55f thead {
+  display: none;
+}
+</style>
+<table id="T_7c55f">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_7c55f_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_7c55f_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_7c55f_level0_row0" class="row_heading level0 row0">39</th>
+      <td id="T_7c55f_row0_col0" class="data row0 col0">0.073053</td>
+      <td id="T_7c55f_row0_col1" class="data row0 col1">0.131693</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_9b2f1 thead {
+  display: none;
+}
+</style>
+<table id="T_9b2f1">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_9b2f1_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_9b2f1_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_9b2f1_level0_row0" class="row_heading level0 row0">40</th>
+      <td id="T_9b2f1_row0_col0" class="data row0 col0">0.087147</td>
+      <td id="T_9b2f1_row0_col1" class="data row0 col1">0.098189</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_d51dd thead {
+  display: none;
+}
+</style>
+<table id="T_d51dd">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_d51dd_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_d51dd_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_d51dd_level0_row0" class="row_heading level0 row0">41</th>
+      <td id="T_d51dd_row0_col0" class="data row0 col0">0.178266</td>
+      <td id="T_d51dd_row0_col1" class="data row0 col1">0.205903</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_593da thead {
+  display: none;
+}
+</style>
+<table id="T_593da">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_593da_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_593da_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_593da_level0_row0" class="row_heading level0 row0">42</th>
+      <td id="T_593da_row0_col0" class="data row0 col0">0.099110</td>
+      <td id="T_593da_row0_col1" class="data row0 col1">0.110045</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_281b5 thead {
+  display: none;
+}
+</style>
+<table id="T_281b5">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_281b5_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_281b5_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_281b5_level0_row0" class="row_heading level0 row0">43</th>
+      <td id="T_281b5_row0_col0" class="data row0 col0">0.133939</td>
+      <td id="T_281b5_row0_col1" class="data row0 col1">0.302774</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_13014 thead {
+  display: none;
+}
+</style>
+<table id="T_13014">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_13014_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_13014_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_13014_level0_row0" class="row_heading level0 row0">44</th>
+      <td id="T_13014_row0_col0" class="data row0 col0">0.085011</td>
+      <td id="T_13014_row0_col1" class="data row0 col1">0.180767</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_dbb86 thead {
+  display: none;
+}
+</style>
+<table id="T_dbb86">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_dbb86_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_dbb86_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_dbb86_level0_row0" class="row_heading level0 row0">45</th>
+      <td id="T_dbb86_row0_col0" class="data row0 col0">0.138991</td>
+      <td id="T_dbb86_row0_col1" class="data row0 col1">0.199966</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_10742 thead {
+  display: none;
+}
+</style>
+<table id="T_10742">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_10742_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_10742_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_10742_level0_row0" class="row_heading level0 row0">46</th>
+      <td id="T_10742_row0_col0" class="data row0 col0">0.112717</td>
+      <td id="T_10742_row0_col1" class="data row0 col1">0.085119</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_f7569 thead {
+  display: none;
+}
+</style>
+<table id="T_f7569">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_f7569_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_f7569_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_f7569_level0_row0" class="row_heading level0 row0">47</th>
+      <td id="T_f7569_row0_col0" class="data row0 col0">0.276444</td>
+      <td id="T_f7569_row0_col1" class="data row0 col1">0.096584</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_72651 thead {
+  display: none;
+}
+</style>
+<table id="T_72651">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_72651_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_72651_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_72651_level0_row0" class="row_heading level0 row0">48</th>
+      <td id="T_72651_row0_col0" class="data row0 col0">0.132728</td>
+      <td id="T_72651_row0_col1" class="data row0 col1">0.187248</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+#T_be6d6 thead {
+  display: none;
+}
+</style>
+<table id="T_be6d6">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_be6d6_level0_col0" class="col_heading level0 col0">train</th>
+      <th id="T_be6d6_level0_col1" class="col_heading level0 col1">valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_be6d6_level0_row0" class="row_heading level0 row0">49</th>
+      <td id="T_be6d6_row0_col0" class="data row0 col0">0.149210</td>
+      <td id="T_be6d6_row0_col1" class="data row0 col1">0.139900</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</section>
+</section>
+<section id="save-model" class="level2">
+<h2 class="anchored" data-anchor-id="save-model">Save Model</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>output_dir<span class="op">=</span><span class="st">"dreambooth/out"</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>uw_model <span class="op">=</span> trainer.DreamBoothTrainCB.acc.unwrap_model(trainer.model)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>pipeline <span class="op">=</span> DiffusionPipeline.from_pretrained(</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    pretrained_model,</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    unet<span class="op">=</span>uw_model.unet,</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    text_encoder<span class="op">=</span>uw_model.text_encoder,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    revision<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>pipeline.save_pretrained(output_dir)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Fetching 16 files: 100%|██████████| 16/16 [00:00&lt;00:00, 27962.03it/s]
+/home/python3.10/lib/python3.10/site-packages/transformers/models/clip/feature_extraction_clip.py:28: FutureWarning: The class CLIPFeatureExtractor is deprecated and will be removed in version 5 of Transformers. Please use CLIPImageProcessor instead.
+  warnings.warn(</code></pre>
+</div>
+</div>
+</section>
+<section id="generate-new-images" class="level2">
+<h2 class="anchored" data-anchor-id="generate-new-images">Generate New Images</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> StableDiffusionPipeline.from_pretrained(output_dir,safety_checker<span class="op">=</span><span class="va">None</span>, torch_dtype<span class="op">=</span>torch.float16).to(<span class="st">"cuda"</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>prompt <span class="op">=</span> <span class="st">"a photo of sks dog in a bucket"</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>images <span class="op">=</span> [pipe(prompt, num_inference_steps<span class="op">=</span><span class="dv">50</span>, guidance_scale<span class="op">=</span><span class="fl">7.5</span>).images[<span class="dv">0</span>] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">9</span>)]</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>clear_output()</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(prompt)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>show_images(images)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>a photo of sks dog in a bucket</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="30_DreamBooth_files/figure-html/cell-17-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
