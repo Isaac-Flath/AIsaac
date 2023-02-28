@@ -30,7 +30,7 @@ def collate_dataset_dict(dataset):
 
 # %% ../nbs/10_dataloaders.ipynb 9
 class DataLoaders():
-    def __init__(self, train, valid): fc.store_attr()
+    def __init__(self, train, valid,n_inp=1): fc.store_attr()
     
     @classmethod
     def from_dataset_dict(cls, dataset_dict, batch_size, **kwargs):

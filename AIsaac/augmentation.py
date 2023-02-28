@@ -41,7 +41,7 @@ class BatchAugmentationCB(Callback):
     def __init__(self,tfms): self.tfms = fc.L(tfms)
     def before_batch(self,trainer):
         '''applies tfms in tfms list to appropriate items in batch'''
-        trainer.batch = tuple(tfm(item) for tfm,item in zip_longest(self.tfms,trainer.batch,fillvalue=fc.noop))
+        trainer.batch = fc.L(tfm(item) for tfm,item in zip_longest(self.tfms,trainer.batch,fillvalue=fc.noop))
 
 # %% ../nbs/44_augmentation.ipynb 11
 class UnNormalize:
